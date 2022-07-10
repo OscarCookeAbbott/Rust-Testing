@@ -18,4 +18,5 @@ fn main() -> () {
     println!("P1 / 2.0:  {}", p1 / 2.0);
 
     println!("P1 . P2:   {}", Vector::dot(&p1, &p2));
+    println!("P1 x P2:   {}", Vector::cross(&p1, &p2));
 }

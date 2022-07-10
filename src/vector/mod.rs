@@ -39,6 +39,9 @@ impl<T> Vector<T>
 where
     T: Copy + Sub<Output = T> + Mul<Output = T> + Neg<Output = T>,
 {
+    /// Computes the cross product of two vectors.
+    ///
+    /// (a.y * b.z - a.z * b.y,  -(a.x * b.z - a.z * b.x),  a.x * b.y - a.y * b.x)
     pub fn cross(a: &Self, b: &Self) -> Self {
         Self::new(a.y * b.z - a.z * b.y, -(a.x * b.z - a.z * b.x), a.x * b.y - a.y * b.x)
     }
@@ -46,7 +49,7 @@ where
 
 impl<T: Display> Display for Vector<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        write!(f, "({x}, {y})", x = self.x, y = self.y)
+        write!(f, "({x}, {y}, {z})", x = self.x, y = self.y, z = self.z)
     }
 }
 
