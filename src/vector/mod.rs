@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 use std::cmp::*;
 use std::fmt::*;
 use std::ops::*;
@@ -10,6 +13,13 @@ pub struct Vector<T> {
     pub z: T,
 }
 
+macro_rules! vector {
+    ( $x:expr, $y:expr, $z:expr ) => {
+        Vector::new($x, $y, $z)
+    };
+}
+pub(crate) use vector;
+
 impl<T> Vector<T> {
     /// Creates a new `2D Vector` with the given coordinates.
     pub fn new(x: T, y: T, z: T) -> Self {
@@ -17,7 +27,10 @@ impl<T> Vector<T> {
     }
 }
 
-impl<T> Neg for Vector<T> where T: Neg<Output = T> {
+impl<T> Neg for Vector<T>
+where
+    T: Neg<Output = T>,
+{
     type Output = Self;
 
     fn neg(self) -> Self::Output {
@@ -43,7 +56,11 @@ where
     ///
     /// (a.y * b.z - a.z * b.y,  -(a.x * b.z - a.z * b.x),  a.x * b.y - a.y * b.x)
     pub fn cross(a: &Self, b: &Self) -> Self {
-        Self::new(a.y * b.z - a.z * b.y, -(a.x * b.z - a.z * b.x), a.x * b.y - a.y * b.x)
+        Self::new(
+            a.y * b.z - a.z * b.y,
+            -(a.x * b.z - a.z * b.x),
+            a.x * b.y - a.y * b.x,
+        )
     }
 }
 
@@ -61,7 +78,11 @@ impl<T: PartialEq> PartialEq for Vector<T> {
 
 impl<T: Clone> Clone for Vector<T> {
     fn clone(&self) -> Self {
-        Self { x: self.x.clone(), y: self.y.clone(), z: self.z.clone() }
+        Self {
+            x: self.x.clone(),
+            y: self.y.clone(),
+            z: self.z.clone(),
+        }
     }
 }
 
@@ -249,97 +270,5 @@ where
         self.x /= rhs;
         self.y /= rhs;
         self.z /= rhs;
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::Vector;
-
-    #[test]
-    fn add() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(5.0, -3.0, 1.0);
-        assert_eq!(v1 + v2, value)
-    }
-
-    #[test]
-    fn add_assign() {
-        let mut v1 = Vector::new(-1.0, 2.0, -3.0);
-        v1 += Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(5.0, -3.0, 1.0);
-        assert_eq!(v1, value)
-    }
-
-    #[test]
-    fn sub() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-7.0, 7.0, -7.0);
-        assert_eq!(v1 - v2, value)
-    }
-
-    #[test]
-    fn sub_assign() {
-        let mut v1 = Vector::new(-1.0, 2.0, -3.0);
-        v1 -= Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-7.0, 7.0, -7.0);
-        assert_eq!(v1, value)
-    }
-
-    #[test]
-    fn mul() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-6.0, -10.0, -12.0);
-        assert_eq!(v1 * v2, value)
-    }
-
-    #[test]
-    fn mul_assign() {
-        let mut v1 = Vector::new(-1.0, 2.0, -3.0);
-        v1 *= Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-6.0, -10.0, -12.0);
-        assert_eq!(v1, value)
-    }
-
-    #[test]
-    fn div() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-1.0 / 6.0, -2.0 / 5.0, -3.0 / 4.0);
-        assert_eq!(v1 / v2, value)
-    }
-
-    #[test]
-    fn div_assign() {
-        let mut v1 = Vector::new(-1.0, 2.0, -3.0);
-        v1 /= Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-1.0 / 6.0, -2.0 / 5.0, -3.0 / 4.0);
-        assert_eq!(v1, value)
-    }
-
-    #[test]
-    fn neg() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let value = Vector::new(1.0, -2.0, 3.0);
-        assert_eq!(-v1, value)
-    }
-
-    #[test]
-    fn dot() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = -28.0;
-        assert_eq!(Vector::dot(&v1, &v2), value)
-    }
-
-    #[test]
-    fn cross() {
-        let v1 = Vector::new(-1.0, 2.0, -3.0);
-        let v2 = Vector::new(6.0, -5.0, 4.0);
-        let value = Vector::new(-7.0, -14.0, -7.0);
-        assert_eq!(Vector::cross(&v1, &v2), value)
     }
 }
