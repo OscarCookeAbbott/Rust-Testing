@@ -5,14 +5,6 @@ use std::cmp::*;
 use std::fmt::*;
 use std::ops::*;
 
-/// A basic struct which covers the fundamentals of vector math.
-#[derive(Default, Debug, Copy)]
-pub struct Vector<T> {
-    pub x: T,
-    pub y: T,
-    pub z: T,
-}
-
 macro_rules! vector {
     ( $x:expr, $y:expr, $z:expr ) => {
         Vector::new($x, $y, $z)
@@ -20,8 +12,16 @@ macro_rules! vector {
 }
 pub(crate) use vector;
 
+/// A basic struct which covers the fundamentals of generic vector math.
+#[derive(Default, Debug, Copy)]
+pub struct Vector<T> {
+    pub x: T,
+    pub y: T,
+    pub z: T,
+}
+
 impl<T> Vector<T> {
-    /// Creates a new `2D Vector` with the given coordinates.
+    /// Creates a new Vector with the given values.
     pub fn new(x: T, y: T, z: T) -> Self {
         Self { x, y, z }
     }
