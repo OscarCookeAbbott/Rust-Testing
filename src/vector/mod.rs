@@ -10,10 +10,11 @@ macro_rules! vector {
         Vector::new($x, $y, $z)
     };
 }
+use bevy::prelude::Component;
 pub(crate) use vector;
 
 /// A basic struct which covers the fundamentals of generic vector math.
-#[derive(Default, Debug, Copy)]
+#[derive(Default, Debug, Copy, Component)]
 pub struct Vector<T> {
     pub x: T,
     pub y: T,
